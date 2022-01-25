@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sevenhome.dao.SubscribeDao">
+    <resultMap id="subscribe_roomtype_employee" type="com.sevenhome.bean.po.Subscribe">
+        <result property="vipId" column="vip_id" />
+        <result property="roomtypeId" column="roomtype_id" />
+        <result property="employeeId" column="employee_id" />
+
+        <association property="roomType"
+                     column="roomtype_id"
+                     javaType="com.sevenhome.bean.po.RoomType"
+                     select="com.sevenhome.dao.RoomTypeDao.getRoomType"/>
+        <association property="employee"
+                     column="employee_id"
+                     javaType="com.sevenhome.bean.po.Employee"
+                     select="com.sevenhome.dao.EmployeeDao.getEmployee"/>
+    </resultMap>
+    
+    <resultMap id="subscribe_vip_roomtype_employee" type="com.sevenhome.bean.po.Subscribe">
+        <association property="vip"
+                     column="vip_id"
+                     javaType="com.sevenhome.bean.po.Vip"
+                     select="com.sevenhome.dao.VipDao.getVipById"/>
+        <association property="roomType"
+                     column="roomtype_id"
+                     javaType="com.sevenhome.bean.po.RoomType"
+                     select="com.sevenhome.dao.RoomTypeDao.getRoomType"/>
+        <association property="employee"
+                     column="employee_id"
+                     javaType="com.sevenhome.bean.po.Employee"
+                     select="com.sevenhome.dao.EmployeeDao.getEmployee"/>
+    </resultMap>
+
+    <update id="batUpdateSubscribeStatus" parameterType="java.util.List">
+        update subscribe set subscribe_status = 2 where id in
+        <foreach collection="ids" item="id"  open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

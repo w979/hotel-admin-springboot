@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sevenhome.dao.EmployeeDao">
+    <resultMap id="employee_perms" type="com.sevenhome.bean.po.Employee" autoMapping="true">
+        <collection property="permList"
+                    column="id"
+                    ofType="String"
+                    select="com.sevenhome.dao.PermsDao.selectPermsByEmployeeId"/>
+    </resultMap>
+
+    <resultMap id="employee_dept" type="com.sevenhome.bean.po.Employee" autoMapping="true">
+        <association property="role" column="role_id" javaType="com.sevenhome.bean.po.Role" select="com.sevenhome.dao.RoleDao.selectByRoleId">
+        </association>
+    </resultMap>
+</mapper>

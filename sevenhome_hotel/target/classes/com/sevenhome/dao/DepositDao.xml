@@ -1,0 +1,12 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sevenhome.dao.DepositDao">
+
+    <resultMap id="deposit_orders" type="com.sevenhome.bean.po.Deposit">
+        <association property="orders"
+                     column="order_id"
+                     javaType="com.sevenhome.bean.po.Orders"
+                     select="com.sevenhome.dao.OrdersDao.getOrdersById"/>
+    </resultMap>
+</mapper>

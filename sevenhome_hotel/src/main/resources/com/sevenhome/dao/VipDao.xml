@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sevenhome.dao.VipDao">
+    <resultMap id="vip_viptype" type="com.sevenhome.bean.po.Vip">
+    <association property="vipType"
+                 column="viptype_id"
+                 javaType="com.sevenhome.bean.po.VipType"
+                 select="com.sevenhome.dao.VipTypeDao.getVipType"/>
+    </resultMap>
+
+    <resultMap id="vip_useronline" type="com.sevenhome.bean.po.Vip" autoMapping="true">
+        <association property="userOnline"
+                     column="useronline_id"
+                     javaType="com.sevenhome.bean.po.UserOnline"
+                     autoMapping="true"
+                     select="com.sevenhome.dao.UserOnlineDao.getUserOnlineById"/>
+    </resultMap>
+
+    <resultMap id="vip_useronline_viptype" type="com.sevenhome.bean.po.Vip" autoMapping="true">
+        <association property="userOnline"
+                     column="useronline_id"
+                     javaType="com.sevenhome.bean.po.UserOnline"
+                     autoMapping="true"
+                     select="com.sevenhome.dao.UserOnlineDao.getUserOnlineById"/>
+        <association property="vipType"
+                     column="viptype_id"
+                     javaType="com.sevenhome.bean.po.VipType"
+                     select="com.sevenhome.dao.VipTypeDao.getVipType"/>
+    </resultMap>
+</mapper>

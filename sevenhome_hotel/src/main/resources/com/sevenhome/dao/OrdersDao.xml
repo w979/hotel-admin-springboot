@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sevenhome.dao.OrdersDao">
+
+    <resultMap id="orders_checkin_subscribe" type="com.sevenhome.bean.po.Orders" autoMapping="true">
+        <association property="checkIn"
+                     column="checkin_id"
+                     javaType="com.sevenhome.bean.po.CheckIn"
+                     select="com.sevenhome.dao.CheckInDao.getCheckInById" />
+        <association property="subscribe"
+                     column="subscribe_id"
+                     javaType="com.sevenhome.bean.po.Subscribe"
+                     select="com.sevenhome.dao.SubscribeDao.getSubscribeById" />
+    </resultMap>
+
+    <resultMap id="orders_room_subscibe_checkIn" type="com.sevenhome.bean.po.Orders">
+
+        <association property="room"
+                     column="room_id"
+                     javaType="com.sevenhome.bean.po.Room"
+                     select="com.sevenhome.dao.RoomDao.getRoomById"/>
+
+        <association property="subscribe"
+                     column="subscribe_id"
+                     javaType="com.sevenhome.bean.po.Subscribe"
+                     select="com.sevenhome.dao.SubscribeDao.getSubscribeById"/>
+
+        <association property="checkIn"
+                     column="checkin_id"
+                     javaType="com.sevenhome.bean.po.CheckIn"
+                     select="com.sevenhome.dao.CheckInDao.getCheckInById"/>
+    </resultMap>
+
+    <resultMap id="order_room" type="com.sevenhome.bean.po.Orders">
+        <association property="room" column="room_id" javaType="com.sevenhome.bean.po.Room" select="com.sevenhome.dao.RoomDao.selectByRoomId">
+        </association>
+
+        <association property="deposit" column="id" javaType="com.sevenhome.bean.po.Deposit" select="com.sevenhome.dao.DepositDao.selectByDepositId">
+        </association>
+    </resultMap>
+
+    <resultMap id="order_subscribe_employee_hotel" type="com.sevenhome.bean.vo.VisualDataVo">
+        <result column="num" property="num"></result>
+        <result column="hotelname" property="hotelname"></result>
+    </resultMap>
+
+    <update id="batUpdateOrderStatus" parameterType="java.util.List">
+        update `orders` set order_status = '2' where id in
+    <foreach collection="ids" item="id"  open="(" separator="," close=")">
+        #{id}
+    </foreach>
+    </update>
+    <resultMap id="everydayBusiness" type="com.sevenhome.bean.vo.EveryDayBusinessVo">
+        <result column="dat" property="everyDay"></result>
+        <result column="money" property="money"></result>
+    </resultMap>
+</mapper>
+
+

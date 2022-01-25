@@ -1,0 +1,13 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sevenhome.dao.DepositDetailDao">
+    <!--wry-->
+    <resultMap id="depositdetail_goods" type="com.sevenhome.bean.po.DepositDetail">
+        <association property="roomGoods"
+                     column="roomgoods_id"
+                     javaType="com.sevenhome.bean.po.RoomGoods"
+                     select="com.sevenhome.dao.RoomGoodsDao.getRoomGoodsById"/>
+    </resultMap>
+
+</mapper>

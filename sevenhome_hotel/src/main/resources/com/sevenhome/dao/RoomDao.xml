@@ -1,0 +1,38 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sevenhome.dao.RoomDao">
+    <resultMap id="room_hotel" type="com.sevenhome.bean.po.Room">
+        <association property="hotel"
+                     column="hotel_id"
+                     javaType="com.sevenhome.bean.po.Hotel"
+                     select="com.sevenhome.dao.HotelDao.getHotelById"/>
+    </resultMap>
+
+    <resultMap id="room_roomtype" type="com.sevenhome.bean.po.Room">
+        <id column="id" property="id"></id>
+        <result column="rommno" property="rommno"></result>
+        <result column="roomtype_id" property="roomtypeId"></result>
+        <result column="room_floor" property="roomFloor"></result>
+        <result column="room_status" property="roomStatus"></result>
+        <result column="hotel_id" property="hotelId"></result>
+        <!-- 映射房间类型 -->
+        <association property="roomType" javaType="com.sevenhome.bean.po.RoomType" column="roomtype_id" autoMapping="true">
+        </association>
+        <!-- 映射房间状态 -->
+        <association property="rs" javaType="com.sevenhome.bean.po.RoomStatus" autoMapping="true" column="id">
+        </association>
+<!--        select="com.sevenhome.dao.RoomStatusDao.selectByRoomStatus"-->
+<!--        select="com.sevenhome.dao.RoomTypeDao.selectByRoomType"-->
+<!--        <collection property="rs" ofType="com.sevenhome.bean.po.RoomStatus" column="id" select="com.sevenhome.dao.RoomStatusDao.selectByRoomStatus">-->
+<!--        </collection>-->
+    </resultMap>
+
+    <resultMap id="room_roomType" type="com.sevenhome.bean.po.Room">
+        <association property="roomType"
+                     column="roomtype_id"
+                     javaType="com.sevenhome.bean.po.RoomType"
+                     select="com.sevenhome.dao.RoomTypeDao.getRoomType"/>
+    </resultMap>
+
+</mapper>

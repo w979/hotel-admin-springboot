@@ -1,0 +1,12 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sevenhome.dao.BusinessDao">
+    <resultMap id="business_order" type="com.sevenhome.bean.po.Business">
+
+        <association property="orders" column="grorder_id" javaType="com.sevenhome.bean.po.Orders" select="com.sevenhome.dao.OrdersDao.selectByOrdersId">
+        </association>
+    </resultMap>
+
+</mapper>
