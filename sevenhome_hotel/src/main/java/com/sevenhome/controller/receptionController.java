@@ -178,10 +178,6 @@ public class receptionController {
     @PreAuthorize("hasAuthority('subscribe:querySubscribeDetail')")
     public ResponseResult<Object> getSubscribeById(@RequestParam("id") Integer id){
         SubscribeDetailVo subscribeDetailVo = subscribeService.getSubscribeById(id);
-        System.out.println(subscribeDetailVo.toString());
-        System.out.println(subscribeDetailVo.getVip().toString());
-        System.out.println(subscribeDetailVo.getRoomType().toString());
-        System.out.println(subscribeDetailVo.getEmployee().toString());
         if(subscribeDetailVo!=null){
             return new ResponseResult<>(200, "ok", subscribeDetailVo);
         } else {
@@ -197,8 +193,6 @@ public class receptionController {
     @GetMapping("subscribe/getSubscribeRoom")
     public ResponseResult<Object> getSubscribeRoom(@RequestParam("roomno") String roomno){
         RoomVo subscribeRoomVo = roomService.getSubscribeRoom(roomno);
-        System.out.println(subscribeRoomVo.toString());
-        System.out.println(subscribeRoomVo.getRoomType().toString());
         if(subscribeRoomVo!=null){
             return new ResponseResult<>(200, "ok",subscribeRoomVo);
         }else {
@@ -229,7 +223,6 @@ public class receptionController {
     @PreAuthorize("hasAuthority('checkin:insertCheckin')")
     public ResponseResult<Object> insertCheckin(@RequestBody CheckinFo checkinFo){
         checkinFo.setCheckinOrigin("2");
-        System.out.println(checkinFo.toString());
         int checkinId = 0;
         try {
             checkinId = checkInService.insertCheckin(checkinFo);

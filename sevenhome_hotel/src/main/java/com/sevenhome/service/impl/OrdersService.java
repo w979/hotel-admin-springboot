@@ -214,9 +214,9 @@ public class OrdersService implements IOrdersService {
 
         //查询房态表，获得在该酒店，且在预订房型，且为空的房间对象
         Room roomType = roomDao.getRoomGroupBy(employee.getHotelId(), subscribe.getRoomtypeId(), ids);
-
         Room roomId = roomDao.getOneRoomId(roomType.getRoomtypeId(), ids);
 
+        //向订单表插入记录
         Orders orders = new Orders();
         orders.setOrderno(RandomCode.getNo());
         Subscribe getTotal = subscribeDao.getSubscribeByName(subscribe.getSubscribeName(),subscribe.getId());
@@ -240,6 +240,7 @@ public class OrdersService implements IOrdersService {
             roomIds.add(roomStatus.getId());
         }
         if(roomIds!=null){
+            //修改房态表房间状态
             roomStatusDao.updateRoomStatus(roomIds);
         }else {
             throw new Exception("没有该房间！");

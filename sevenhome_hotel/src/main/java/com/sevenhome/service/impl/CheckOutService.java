@@ -97,10 +97,18 @@ public class CheckOutService implements ICheckOutService {
         Integer roomId = roomDao.getRoomId(checkOutFo.getRoomno(), emp.getHotelId());
         String orderno = ordersDao.getOrderNoByRoomId(roomId);
         Orders orders = ordersDao.selectOrdersByOrdersno(orderno);
-
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date checkinLeavetime = orders.getCheckIn().getCheckinLeavetime();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format1 = sdf.format(checkinLeavetime);
+        String[] s1 = format1.split(" ");
+        String oldLeaveTime = s1[0]+" 14:00:00";
+        try {
+            checkinLeavetime = sdf.parse(oldLeaveTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         String time = checkOutFo.getUpdateLeaveTime()+" 14:00:00";
         //修改的日期
         Date newLeaveTime = null;
@@ -122,17 +130,19 @@ public class CheckOutService implements ICheckOutService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         //原 离店时间 - 到店时间 = 原预定天数
         long l = checkinLeavetime.getTime() - parse.getTime();
         long oldDays = l / 24 / 60 / 60 / 1000;
         //退掉的天数
         long days = interval / 24 / 60 / 60 / 1000;
+        System.out.println("推掉的天数"+days);
 
         //原价格
         BigDecimal orderTotalprice = orders.getCheckIn().getCheckinRoomrate();
-
         //单日价格
         BigDecimal oneDayPrice = orderTotalprice.divide(BigDecimal.valueOf(oldDays), BigDecimal.ROUND_HALF_UP).setScale(1, BigDecimal.ROUND_HALF_UP) ;
+
         //退给客户的钱
         BigDecimal refund = oneDayPrice.multiply(BigDecimal.valueOf(days));
 
@@ -146,13 +156,14 @@ public class CheckOutService implements ICheckOutService {
         roomStatusDao.delRoomStatusByDateAndRoomId(newLeaveTime, roomId);
 
         HashMap<String, String> map = new HashMap<>();
+        System.out.println(refund);
         map.put("returnDays",String.valueOf(days));
         map.put("returnMoney",String.valueOf(refund));
         return map;
     }
 
     @Override
-    public HashMap<String, Object> checkOutRightNow(CheckOutFo checkOutFo) {
+    public HashMap<String, Object> checkOutRightNow(CheckOutFo checkOutFo){
         Employee emp = employeeDao.findEmployeeByUserName(checkOutFo.getUsername());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //需退给客户的房费
@@ -169,6 +180,13 @@ public class CheckOutService implements ICheckOutService {
         Date oldcheckinLeavetime = orders.getCheckIn().getCheckinLeavetime();
         //预计离店时间日期字符串
         String[] s2 = sdf.format(oldcheckinLeavetime).split(" ");
+        //原离店日期转为下午两点
+        String ss = s2[0]+" 14:00:00";
+        try {
+            oldcheckinLeavetime = sdf.parse(ss);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         //今日日期
         String format = sdf.format(now);
         String[] s = format.split(" ");
@@ -236,6 +254,9 @@ public class CheckOutService implements ICheckOutService {
         //返回剩余房费
         refund = oneDayPrice.multiply(BigDecimal.valueOf(days));
         //修改订单状态为完成
+        System.out.println("----------------");
+        System.out.println(orders.getOrderTotalprice());
+        System.out.println(refund);
         orders.setOrderTotalprice(orders.getOrderTotalprice().subtract(refund));
         orders.setOrderStatus("1");
         ordersDao.updateByPrimaryKeySelective(orders);
@@ -250,6 +271,7 @@ public class CheckOutService implements ICheckOutService {
         Business business = new Business();
         business.setGrorderId(orders.getId());
         businessDao.insertSelective(business);
+        System.out.println(refund+"---1111111");
         //返回结果
         map.put("returnDays",String.valueOf(days));
         map.put("returnMoney",String.valueOf(refund));

@@ -92,7 +92,8 @@ public class CheckInService implements ICheckInService {
                 ids.add(roomStatus.getId());
             }
             if(ids!=null){
-                roomStatusDao.updateRoomStatus(ids);
+                int i = roomStatusDao.updateRoomStatus(ids);
+                System.out.println("修改房态表记录数为："+i);
             }else {
                 throw new Exception("没有该房间！");
             }
